@@ -24,5 +24,14 @@
   "types": "./index.d.ts",
   "devDependencies": {
     "@types/node": "^20.0.0"
-  }
+  },
+  "keywords": [
+    "vite-plugin",
+    "vite",
+    "plugin",
+    "ssh",
+    "tunnel",
+    "reverse",
+    "proxy"
+  ]
 }
