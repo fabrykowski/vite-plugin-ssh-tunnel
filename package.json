@@ -1,0 +1,28 @@
+{
+  "name": "vite-plugin-ssh-tunnel",
+  "version": "1.0.0",
+  "description": "Vite plugin to set up a reverse SSH tunnel for reverse proxies",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabrykowski/vite-plugin-ssh-tunnel.git"
+  },
+  "author": "fabrykowski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fabrykowski/vite-plugin-ssh-tunnel/issues"
+  },
+  "homepage": "https://github.com/fabrykowski/vite-plugin-ssh-tunnel#readme",
+  "dependencies": {
+    "picocolors": "^1.0.0"
+  },
+  "peerDependencies": {
+    "vite": "^5.0.0"
+  },
+  "main": "./index.js",
+  "exports": "./index.js",
+  "types": "./index.d.ts",
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  }
+}
