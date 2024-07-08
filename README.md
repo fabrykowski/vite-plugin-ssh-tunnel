@@ -1,5 +1,7 @@
 # vite-plugin-ssh-tunnel
 
+[![NPM Version](https://img.shields.io/npm/v/vite-plugin-ssh-tunnel)](https://www.npmjs.com/package/vite-plugin-ssh-tunnel)
+
 Vite plugin to set up a reverse SSH tunnel for reverse proxies
 
 ## Installation
