@@ -42,6 +42,7 @@ export const sshTunnel = (config) =>
 
                 if(!existsSync(config.privateKey)) {
                     log('red', `Private key file not found: ${config.privateKey}`);
+                    return;
                 }
 
                 const port = address.port;
