@@ -27,11 +27,21 @@ export const sshTunnel = (config) =>
         configureServer(server) {
             const { httpServer } = server;
 
+            const log = (color, message) => {
+                server.config.logger.info(
+                    pc.magenta('  ➜') + pc.magenta('  tunnel: ') + pc[color](message)
+                );
+            }
+
             httpServer?.on('listening', async () => {
                 const address = httpServer.address();
 
                 if (address === null || typeof address === 'string') {
                     return;
+                }
+
+                if(!existsSync(config.privateKey)) {
+                    log('red', `Private key file not found: ${config.privateKey}`);
                 }
 
                 const port = address.port;
@@ -42,14 +52,12 @@ export const sshTunnel = (config) =>
                     `ssh -i ${config.privateKey} -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -f -N -M -S ${socketPath} -R 0.0.0.0:${config.remotePort ?? 3000}:localhost:${port} ${config.username}@${config.host}`
                 );
 
-                server.config.logger.info(
-                    pc.magenta('  ➜') + pc.magenta('  tunnel: ') + pc.cyan(config.proxyUrl ?? `https://${config.host}`)
-                );
+                log('cyan', config.proxyUrl ?? `https://${config.host}`);
             });
 
             httpServer?.on('close', () => {
                 closeTunnel();
-                server.config.logger.info(pc.magenta('  ➜') + pc.magenta('  tunnel: ') + pc.red('closed'));
+                log('red', 'closed');
             });
         }
     });
