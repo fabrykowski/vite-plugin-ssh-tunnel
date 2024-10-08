@@ -23,7 +23,7 @@
   "exports": "./index.js",
   "types": "./index.d.ts",
   "devDependencies": {
-    "@types/node": "^20.0.0"
+    "@types/node": ">=20.0.0"
   },
   "keywords": [
     "vite-plugin",
