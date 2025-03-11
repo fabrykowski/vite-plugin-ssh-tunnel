@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    groups:
+      dev-major:
+        dependency-type: development
+        update-types:
+          - major
+      dev-safe:
+        dependency-type: development
+      prod-major:
+        dependency-type: production
+        update-types:
+          - major
+      prod-safe:
+        dependency-type: production
