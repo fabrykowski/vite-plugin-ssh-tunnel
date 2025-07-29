@@ -14,7 +14,8 @@
   },
   "homepage": "https://github.com/fabrykowski/vite-plugin-ssh-tunnel#readme",
   "dependencies": {
-    "picocolors": "^1.0.0"
+    "picocolors": "^1.0.0",
+    "shell-quote": "^1.8.3"
   },
   "peerDependencies": {
     "vite": "^5.0.0 || ^6.0.0 || ^7.0.0"

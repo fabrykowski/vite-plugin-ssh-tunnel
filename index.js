@@ -1,8 +1,9 @@
-import pc from 'picocolors';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import { execSync } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import pc from 'picocolors';
+import { quote } from "shell-quote";
 
 const tmpFolderPath = join(tmpdir(), 'vite-plugin-ssh-tunnel');
 
@@ -21,44 +22,43 @@ const closeTunnel = () => {
  * @param {import('./index.d.ts').Config} config - The configuration object for the plugin.
  * @returns {import('vite').Plugin}
  */
-export const sshTunnel = (config) =>
-    ({
-        name: 'ssh-tunnel',
-        configureServer(server) {
-            const { httpServer } = server;
+export const sshTunnel = (config) => ({
+    name: 'ssh-tunnel', configureServer(server) {
+        const { httpServer } = server;
 
-            const log = (color, message) => {
-                server.config.logger.info(
-                    pc.magenta('  ➜') + pc.magenta('  tunnel: ') + pc[color](message)
-                );
+        const log = (color, message) => {
+            server.config.logger.info(pc.magenta('  ➜') + pc.magenta('  tunnel: ') + pc[color](message));
+        }
+
+        httpServer?.on('listening', async () => {
+            const address = httpServer.address();
+
+            if (address === null || typeof address === 'string') {
+                return;
             }
 
-            httpServer?.on('listening', async () => {
-                const address = httpServer.address();
+            const privateKey = resolve(config.privateKey);
 
-                if (address === null || typeof address === 'string') {
-                    return;
-                }
+            if (!existsSync(privateKey)) {
+                log('red', `Private key file not found: ${config.privateKey}`);
+                return;
+            }
 
-                if(!existsSync(config.privateKey)) {
-                    log('red', `Private key file not found: ${config.privateKey}`);
-                    return;
-                }
+            const port = address.port;
+            const remotePort = Math.min(Math.max(Number.isInteger(config.remotePort) ? config.remotePort : 3000, 1), 65535);
+            const username = quote(config.username);
+            const host = quote(config.host);
 
-                const port = address.port;
+            closeTunnel();
 
-                closeTunnel();
+            execSync(`ssh -i ${privateKey} -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -f -N -M -S ${socketPath} -R 0.0.0.0:${remotePort}:localhost:${port} ${username}@${host}`);
 
-                execSync(
-                    `ssh -i ${config.privateKey} -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -f -N -M -S ${socketPath} -R 0.0.0.0:${config.remotePort ?? 3000}:localhost:${port} ${config.username}@${config.host}`
-                );
+            log('cyan', config.proxyUrl ?? `https://${config.host}`);
+        });
 
-                log('cyan', config.proxyUrl ?? `https://${config.host}`);
-            });
-
-            httpServer?.on('close', () => {
-                closeTunnel();
-                log('red', 'closed');
-            });
-        }
-    });
+        httpServer?.on('close', () => {
+            closeTunnel();
+            log('red', 'closed');
+        });
+    }
+});
