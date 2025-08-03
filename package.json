@@ -24,7 +24,8 @@
   "exports": "./index.js",
   "types": "./index.d.ts",
   "devDependencies": {
-    "@types/node": ">=20.0.0"
+    "@types/node": ">=20.0.0",
+    "@types/shell-quote": "^1.7.5"
   },
   "keywords": [
     "vite-plugin",

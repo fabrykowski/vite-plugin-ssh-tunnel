@@ -17,6 +17,7 @@ const closeTunnel = () => {
     }
 };
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * Create a plugin that creates an SSH tunnel to a remote server.
  * @param {import('./index.d.ts').Config} config - The configuration object for the plugin.
@@ -52,8 +53,8 @@ export const sshTunnel = (config) => ({
                 ),
                 65535
             );
-            const username = quote(config.username);
-            const host = quote(config.host);
+            const username = quote([config.username]);
+            const host = quote([config.host]);
 
             closeTunnel();
 
