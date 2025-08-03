@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-ssh-tunnel",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Vite plugin to set up a reverse SSH tunnel for reverse proxies",
   "type": "module",
   "repository": {
